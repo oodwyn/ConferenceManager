@@ -1,0 +1,11 @@
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Build results
+*.dSYM
+ConferenceManager
+
+# VSCode folder
+.vscode
