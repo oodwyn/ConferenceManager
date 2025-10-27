@@ -6,18 +6,31 @@
 int main() {
     setlocale(LC_ALL, "Russian"); // Для корректного отображения русского языка в консоли
 
-    // Тестовое создание объектов
-    Speaker testSpeaker;
-    Administrator testAdmin;
-    ProgramEvent testEvent;
+    std::cout << "Тестирование 2\n" << std::endl;
 
-    std::cout << "\nПроверка вызова методов show():" << std::endl;
-    testSpeaker.show();
-    testAdmin.show();
-    testEvent.show();
+    // Создаем объект через конструктор с параметрами
+    Speaker mainSpeaker("Иванов Иван Иванович", "МГУ", "Квантовые вычисления", "Обзор...");
 
-    std::cout << "\n\nПрограмма завершила работу. Нажмите Enter для выхода.";
-    std::cin.get(); 
+    // Создаем второй объект как копию первого
+    Speaker copiedSpeaker = mainSpeaker;
+
+    // Меняем данные у копии через set-методы
+    copiedSpeaker.setFullName("Петров Петр Петрович");
+    copiedSpeaker.setReportTitle("Нейронные сети");
+
+    // Выводим информацию об обоих объектах
+    std::cout << "\nИнформация об объектах\n" << std::endl;
+    mainSpeaker.show();
+    copiedSpeaker.show();
+
+    // Создаем остальные объекты для проверки
+    Administrator mainAdmin("Сидорова Анна Викторовна", "Организатор", "Регистрация участников");
+    mainAdmin.show();
+
+    ProgramEvent mainEvent("День 1", "10:00", "Открытие конференции");
+    mainEvent.show();
+
+    std::cout << "\nЗавершение программы, вызов деструкторов\n" << std::endl;
 
     return 0;
 }
