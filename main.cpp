@@ -2,35 +2,32 @@
 #include "Speaker.h"
 #include "Administrator.h"
 #include "ProgramEvent.h"
+#include "Keeper.h"
 
 int main() {
     setlocale(LC_ALL, "Russian"); // Для корректного отображения русского языка в консоли
 
-    std::cout << "Тестирование 2\n" << std::endl;
+    std::cout << "Тестирование 3\n" << std::endl;
+    Keeper conferenceManager; // Создаем контейнер
 
-    // Создаем объект через конструктор с параметрами
-    Speaker mainSpeaker("Иванов Иван Иванович", "МГУ", "Квантовые вычисления", "Обзор...");
+    // Добавление тест
+    std::cout << "\n--- Добавляю первого выступающего ---\n";
+    conferenceManager.add();
 
-    // Создаем второй объект как копию первого
-    Speaker copiedSpeaker = mainSpeaker;
+    std::cout << "\n--- Добавляю администратора ---\n";
+    conferenceManager.add();
 
-    // Меняем данные у копии через set-методы
-    copiedSpeaker.setFullName("Петров Петр Петрович");
-    copiedSpeaker.setReportTitle("Нейронные сети");
+    // Вывод
+    conferenceManager.showAll();
 
-    // Выводим информацию об обоих объектах
-    std::cout << "\nИнформация об объектах\n" << std::endl;
-    mainSpeaker.show();
-    copiedSpeaker.show();
+    // Удаление тест
+    std::cout << "\n--- Удаляю запись ---\n";
+    conferenceManager.remove();
 
-    // Создаем остальные объекты для проверки
-    Administrator mainAdmin("Сидорова Анна Викторовна", "Организатор", "Регистрация участников");
-    mainAdmin.show();
+    // Вывод
+    conferenceManager.showAll();
 
-    ProgramEvent mainEvent("День 1", "10:00", "Открытие конференции");
-    mainEvent.show();
-
-    std::cout << "\nЗавершение программы, вызов деструкторов\n" << std::endl;
+    std::cout << "\n--- Программа завершает работу ---" << std::endl;
 
     return 0;
 }
