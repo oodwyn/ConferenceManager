@@ -34,7 +34,7 @@ void Keeper::showAll() {
     } else {
         for (int i = 0; i < this->size; i++) {
             std:: cout << "--- Запись №" << i + 1 << " ---" << std::endl;
-            this->data[i]->show(); // Для каждого типа вызывается нужный show()
+            this->data[i]->show(std::cout); // Для каждого типа вызывается нужный show()
         }
     }
     std::cout << "\n" << std::endl;

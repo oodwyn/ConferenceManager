@@ -54,11 +54,16 @@ void Administrator::setResponsibility(std::string resp) {
     this->responsibility = resp;
 }
 
-void Administrator::show() {
-    std::cout << "-------------------------------------\n";
-    std::cout << "Тип:          Администратор\n";
-    std::cout << "ФИО:          " << this->fullName << "\n";
-    std::cout << "Должность:    " << this->position << "\n";
-    std::cout << "Зона ответ.:  " << this->responsibility << "\n";
-    std::cout << "-------------------------------------\n" << std::endl;
+void Administrator::show(std::ostream& os) const {
+    os << "-------------------------------------\n";
+    os << "Тип:          Администратор\n";
+    os << "ФИО:          " << this->fullName << "\n";
+    os << "Должность:    " << this->position << "\n";
+    os << "Зона ответ.:  " << this->responsibility << "\n";
+    os << "-------------------------------------\n" << std::endl;
+}
+
+std::ostream& operator<<(std::ostream& os, const Administrator& administrator) {
+    administrator.show(os); // Вызываем метод show, передавая ему поток вывода
+    return os; // Возвращаем поток для цепочек вывода
 }

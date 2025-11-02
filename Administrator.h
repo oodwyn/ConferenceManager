@@ -25,5 +25,6 @@ public:
     void setPosition(std::string pos);
     void setResponsibility(std::string resp);
 
-    void show() override;
+    void show(std::ostream& os) const override;
+    friend std::ostream& operator<<(std::ostream& os, const Administrator& administrator);
 };

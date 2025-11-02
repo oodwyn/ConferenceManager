@@ -8,7 +8,6 @@ void showMenu() {
     std::cout << "\n===== МЕНЮ УПРАВЛЕНИЯ КОНФЕРЕНЦИЕЙ =====" << std::endl;
     std::cout << "1. Добавить запись" << std::endl;
     std::cout << "2. Удалить запись" << std::endl;
-    // --- НОВЫЙ ПУНКТ ---
     std::cout << "3. Редактировать запись" << std::endl;
     std::cout << "4. Показать все записи" << std::endl;
     std::cout << "5. Сохранить данные в файл" << std::endl;
@@ -22,10 +21,14 @@ void showMenu() {
 int main() {
     setlocale(LC_ALL, "Russian"); // Для корректного отображения русского языка в консоли
 
-    std::cout << "Тестирование 4\n" << std::endl;
+    std::cout << "Тестирование 5\n" << std::endl;
     Keeper conferenceManager;
     const std::string filename = "conference_data.txt";
     int choice;
+
+    std::cout << "\nТестируем перегруженный оператор '<<' " << std::endl;
+    Speaker testSpeaker("Иванов Иван Иванович", "ГУАП", "Тестирование", "///");
+    std::cout << testSpeaker;
 
     try {
         conferenceManager.loadFromFile(filename);
@@ -51,7 +54,6 @@ int main() {
             case 2:
                 conferenceManager.remove();
                 break;
-                // --- НОВЫЙ CASE ---
             case 3:
                 conferenceManager.edit();
                 break;

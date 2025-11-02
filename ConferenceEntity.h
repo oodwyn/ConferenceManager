@@ -1,5 +1,5 @@
 #pragma once // Защита от двойного включения одного и того же файла
-
+#include <ostream>
 // Абстрактный базовый класс для всех сущностей конференции
 class ConferenceEntity {
 public:
@@ -7,5 +7,5 @@ public:
     virtual ~ConferenceEntity() = 0;
 
     // Виртуальный метод для отображения информации
-    virtual void show() = 0;
+    virtual void show(std::ostream& os) const = 0;
 };

@@ -29,5 +29,6 @@ public:
     void setAnnotation(std::string anno);
 
     // Переопределенный метод для вывода информации
-    void show() override;
+    void show(std::ostream& os) const override;
+    friend std::ostream& operator<<(std::ostream& os, const Speaker& speaker);
 };

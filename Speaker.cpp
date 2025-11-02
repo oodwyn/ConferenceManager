@@ -65,12 +65,17 @@ void Speaker::setAnnotation(std::string anno) {
     this->annotation = anno;
 }
 
-void Speaker::show() {
-    std::cout << "-------------------------------------\n";
-    std::cout << "Тип:         Выступающий\n";
-    std::cout << "ФИО:         " << this->fullName << "\n";
-    std::cout << "Организация: " << this->organization << "\n";
-    std::cout << "Доклад:      " << this->reportTitle << "\n";
-    std::cout << "Аннотация:   " << this->annotation << "\n";
-    std::cout << "-------------------------------------\n" << std::endl;
+void Speaker::show(std::ostream& os) const {
+    os << "-------------------------------------\n";
+    os << "Тип:         Выступающий\n";
+    os << "ФИО:         " << this->fullName << "\n";
+    os << "Организация: " << this->organization << "\n";
+    os << "Доклад:      " << this->reportTitle << "\n";
+    os << "Аннотация:   " << this->annotation << "\n";
+    os << "-------------------------------------\n" << std::endl;
+}
+
+std::ostream& operator<<(std::ostream& os, const Speaker& speaker) {
+    speaker.show(os); // Вызываем метод show, передавая ему поток вывода
+    return os; // Возвращаем поток для цепочек вывода
 }

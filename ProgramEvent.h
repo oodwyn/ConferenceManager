@@ -31,5 +31,6 @@ public:
     void setTime(std::string time);
     void setEventName(std::string name);
 
-    void show() override;
+    void show(std::ostream& os) const override;
+    friend std::ostream& operator<<(std::ostream& os, const ProgramEvent& programEvent);
 };

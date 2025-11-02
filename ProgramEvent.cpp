@@ -54,11 +54,16 @@ void ProgramEvent::setEventName(std::string name) {
     this->eventName = name;
 }
 
-void ProgramEvent::show() {
-    std::cout << "-------------------------------------\n";
-    std::cout << "Тип:           Событие программы\n";
-    std::cout << "День:          " << this->day << "\n";
-    std::cout << "Время:         " << this->time << "\n";
-    std::cout << "Наименование:  " << this->eventName << "\n";
-    std::cout << "-------------------------------------\n" << std::endl;
+void ProgramEvent::show(std::ostream& os) const {
+    os << "-------------------------------------\n";
+    os << "Тип:           Событие программы\n";
+    os << "День:          " << this->day << "\n";
+    os << "Время:         " << this->time << "\n";
+    os << "Наименование:  " << this->eventName << "\n";
+    os << "-------------------------------------\n" << std::endl;
+}
+
+std::ostream& operator<<(std::ostream& os, const ProgramEvent& programEvent) {
+    programEvent.show(os); // Вызываем метод show, передавая ему поток вывода
+    return os; // Возвращаем поток для цепочек вывода
 }
