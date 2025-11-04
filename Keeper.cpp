@@ -453,3 +453,57 @@ void Keeper::edit() {
     }
     std::cout << "Запись успешно обновлена." << std::endl;
 }
+
+// Метод для копирования объекта
+void Keeper::copy() {
+    if (this->size == 0) {
+        std::cout << "Список пуст, копировать нечего" << std::endl;
+        return;
+    }
+
+    // Проверяем, есть ли место в массиве, и расширяем его, если нужно
+    if (this->size >= this->capacity) {
+        std::cout << "Вместимость хранилища недостаточна. Расширяем..." << std::endl;
+        int newCapacity = this->capacity * 2;
+        ConferenceEntity** newData = new ConferenceEntity*[newCapacity];
+        for (int j = 0; j < this->size; ++j) { newData[j] = this->data[j]; }
+        delete[] this->data;
+        this->data = newData;
+        this->capacity = newCapacity;
+        std::cout << "Вместимость увеличена до " << this->capacity << std::endl;
+    }
+
+    showAll();
+    int index;
+    std::cout << "Введите номер записи, которую нужно скопировать: ";
+    std::cin >> index;
+    std::cin.ignore(32767, '\n');
+    index--;
+
+    if (index < 0 || index >= this->size) {
+        std::cout << "Неверный номер записи" << std::endl;
+        return;
+    }
+
+    // Определяем тип объекта для копирования
+    ConferenceEntity* original = this->data[index];
+    ConferenceEntity* newCopy = nullptr;
+
+    std::cout << "\n--- Создание копии Записи #" << index + 1 << " ---" << std::endl;
+    // Используем dynamic_cast, чтобы вызвать правильный конструктор копирования
+    if (auto sp = dynamic_cast<Speaker*>(original)) {
+        newCopy = new Speaker(*sp);
+    } else if (auto adm = dynamic_cast<Administrator*>(original)) {
+        newCopy = new Administrator(*adm);
+    } else if (auto evt = dynamic_cast<ProgramEvent*>(original)) {
+        newCopy = new ProgramEvent(*evt);
+    }
+
+    if (newCopy) {
+        this->data[this->size] = newCopy; // Добавляем указатель на новую копию
+        this->size++; // Увеличиваем счетчик
+        std::cout << "Копия успешно создана и добавлена в конец списка" << std::endl;
+    } else {
+        std::cout << "Не удалось определить тип объекта для копирования" << std::endl;
+    }
+}

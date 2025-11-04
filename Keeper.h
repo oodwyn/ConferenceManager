@@ -18,6 +18,7 @@ public:
     void removeAll(); // Метод для полного удаления
     void showAll(); // Метод отображения всех объектов
     void edit(); // Метод для редактирования объекта
+    void copy(); // Метод для копирования объекта
 
     void saveToFile();
     void loadFromFile();

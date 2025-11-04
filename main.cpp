@@ -12,6 +12,7 @@ void showMenu() {
     std::cout << "4. Показать все записи" << std::endl;
     std::cout << "5. Сохранить данные в файл" << std::endl;
     std::cout << "6. Загрузить данные из файла" << std::endl;
+    std::cout << "7. Создать копию записи" << std::endl;
     std::cout << "0. Выход" << std::endl;
     std::cout << "==========================================" << std::endl;
     std::cout << "Ваш выбор: ";
@@ -59,6 +60,14 @@ int main() {
             case 6:
                 try {
                     conferenceManager.loadFromFile();
+                } catch (const std::runtime_error& e) {
+                    std::cerr << e.what() << std::endl;
+                }
+                break;
+            case 7:
+                try {
+                    conferenceManager.copy();
+                    break;
                 } catch (const std::runtime_error& e) {
                     std::cerr << e.what() << std::endl;
                 }
