@@ -21,7 +21,6 @@ void showMenu() {
 int main() {
     setlocale(LC_ALL, "Russian"); // Для корректного отображения русского языка в консоли
 
-    std::cout << "Тестирование 5\n" << std::endl;
     Keeper conferenceManager;
     int choice;
 
@@ -42,7 +41,7 @@ int main() {
                 conferenceManager.add();
                 break;
             case 2:
-                conferenceManager.remove();
+                conferenceManager.removeMenu();
                 break;
             case 3:
                 conferenceManager.edit();

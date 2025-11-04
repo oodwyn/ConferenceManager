@@ -119,17 +119,13 @@ void Keeper::add() {
 // Метод удаления объекта
 
 void Keeper::remove() {
-    if (this->size == 0) {
-        std::cout << "Список пуст, удалять нечего" << std::endl;
-        return;
-    }
-
     showAll();
     int index;
     std::cout << "Введите номер записи для удаления: ";
     std::cin >> index;
+    std::cin.ignore(32767, '\n'); // Очистка буфера
 
-    index--; //
+    index--;
 
     // Проверка корректности индекса
     if (index < 0 || index >= this->size) {
@@ -149,6 +145,55 @@ void Keeper::remove() {
     std::cout << "Запись №" << index << " успешно удалена" << std::endl;
 }
 
+// Метод меню удаления
+void Keeper::removeMenu() {
+    if (this->size == 0) {
+        std::cout << "Список пуст, удалять нечего" << std::endl;
+        return;
+    }
+    int choice;
+    std::cout << "\n--- Меню удаления ---\n";
+    std::cout << "1. Удалить одну запись\n";
+    std::cout << "2. Удалить ВСЕ записи\n";
+    std::cout << "0. Назад\n";
+    std::cout << "Ваш выбор: ";
+    std::cin >> choice;
+    std::cin.ignore(32767, '\n'); // Очистка буфера
+
+    switch (choice) {
+        case 1:
+            this->remove(); // Вызываем метод для удаления одной записи
+            break;
+        case 2:
+            this->removeAll(); // Вызываем метод для удаления всех записей
+            break;
+        case 0:
+            return;
+        default:
+            std::cout << "Неверный выбор" << std::endl;
+    }
+}
+
+// Метод удаления всех записей
+void Keeper::removeAll() {
+    std::cout << "Вы уверены, что хотите удалить все записи?(yes/no): ";
+    std::string confirmation;
+    std::getline(std::cin, confirmation);
+
+    if (confirmation == "yes" || confirmation == "YES") {
+        // Удаляем каждый объект
+        for (int i = 0; i < this->size; ++i) {
+            delete this->data[i];
+            this->data[i] = nullptr; // Обнуляем указатель
+        }
+        this->size = 0; // Сбрасываем счетчик
+        std::cout << "Все записи были успешно удалены" << std::endl;
+    } else {
+        std::cout << "Удаление отменено" << std::endl;
+    }
+}
+
+//Метод сохранения в файл
 void Keeper::saveToFile() {
 
     // Открываем файл для записи
