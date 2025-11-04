@@ -23,18 +23,7 @@ int main() {
 
     std::cout << "Тестирование 5\n" << std::endl;
     Keeper conferenceManager;
-    const std::string filename = "conference_data.txt";
     int choice;
-
-    std::cout << "\nТестируем перегруженный оператор '<<' " << std::endl;
-    Speaker testSpeaker("Иванов Иван Иванович", "ГУАП", "Тестирование", "///");
-    std::cout << testSpeaker;
-
-    try {
-        conferenceManager.loadFromFile(filename);
-    } catch (const std::runtime_error& e) {
-        std::cerr << e.what() << " Создан пустой список." << std::endl;
-    }
 
     while (true) {
         showMenu();
@@ -46,6 +35,7 @@ int main() {
             std::cout << "Пожалуйста, введите число." << std::endl;
             continue;
         }
+        std::cin.ignore(32767, '\n'); // Чтобы при вводе названия не засчитался символ /n после выбора
 
         switch (choice) {
             case 1:
@@ -62,14 +52,14 @@ int main() {
                 break;
             case 5:
                 try {
-                    conferenceManager.saveToFile(filename);
+                    conferenceManager.saveToFile();
                 } catch (const std::runtime_error& e) {
                     std::cerr << e.what() << std::endl;
                 }
                 break;
             case 6:
                 try {
-                    conferenceManager.loadFromFile(filename);
+                    conferenceManager.loadFromFile();
                 } catch (const std::runtime_error& e) {
                     std::cerr << e.what() << std::endl;
                 }

@@ -149,47 +149,55 @@ void Keeper::remove() {
     std::cout << "Запись №" << index << " успешно удалена" << std::endl;
 }
 
-void Keeper::saveToFile(const std::string& filename) {
+void Keeper::saveToFile() {
 
     // Открываем файл для записи
-    std::ofstream outFile(filename);
+    std::string filename;
+    std::cout << "Введите имя файла для сохранения: ";
+    std::getline(std::cin, filename);
 
+    // Если ничего не ввели
+    if (filename.empty()) {
+        filename = "conference_data.txt";
+    }
+
+    std::ofstream outFile(filename);
     // Проверяем файл на то, открылся ли
     if (!outFile.is_open()) {
         throw std::runtime_error("Ошибка: не удалось открыть файл на запись: " + filename);
     }
 
-    // Запись общего колва объектов
-    outFile << this->size << std::endl;
-
-    for (int i = 0; i < this->size; i++) {
-        // dynamic_cast - проверяем, является ли объект представителем дочернего класса
+    for (int i = 0; i < this->size; ++i) {
         if (auto sp = dynamic_cast<Speaker*>(this->data[i])) {
-            outFile << 1 << std::endl; // Маркер "1" для Speaker
-            outFile << sp->getFullName() << std::endl;
-            outFile << sp->getOrganization() << std::endl;
-            outFile << sp->getReportTitle() << std::endl;
-            outFile << sp->getAnnotation() << std::endl;
+            outFile << "--- Speaker ---" << std::endl;
+            outFile << "FullName: " << sp->getFullName() << std::endl;
+            outFile << "Organization: " << sp->getOrganization() << std::endl;
+            outFile << "ReportTitle: " << sp->getReportTitle() << std::endl;
+            outFile << "Annotation: " << sp->getAnnotation() << std::endl;
         } else if (auto adm = dynamic_cast<Administrator*>(this->data[i])) {
-            outFile << 2 << std::endl; // Маркер "2" для Administrator
-            outFile << adm->getFullName() << std::endl;
-            outFile << adm->getPosition() << std::endl;
-            outFile << adm->getResponsibility() << std::endl;
+            outFile << "--- Administrator ---" << std::endl;
+            outFile << "FullName: " << adm->getFullName() << std::endl;
+            outFile << "Position: " << adm->getPosition() << std::endl;
+            outFile << "Responsibility: " << adm->getResponsibility() << std::endl;
         } else if (auto evt = dynamic_cast<ProgramEvent*>(this->data[i])) {
-            outFile << 3 << std::endl; // Маркер "3" для ProgramEvent
-            outFile << evt->getDay() << std::endl;
-            outFile << evt->getTime() << std::endl;
-            outFile << evt->getEventName() << std::endl;
+            outFile << "--- ProgramEvent ---" << std::endl;
+            outFile << "Day: " << evt->getDay() << std::endl;
+            outFile << "Time: " << evt->getTime() << std::endl;
+            outFile << "EventName: " << evt->getEventName() << std::endl;
         }
+        outFile << "--- End ---" << std::endl; // Конец записи
     }
-
     // Закрываем файл
     outFile.close();
     std::cout << "Данные успешно записаны в файл " << filename << std::endl;
 }
 
-void Keeper::loadFromFile(const std::string& filename) {
+void Keeper::loadFromFile() {
     // Открываем файл для чтения
+    std::string filename;
+    std::cout << "Введите имя файла для загрузки: ";
+    std::getline(std::cin, filename);
+
     std::ifstream inFile(filename);
 
     // Если файл не открылся
@@ -203,69 +211,59 @@ void Keeper::loadFromFile(const std::string& filename) {
     }
     this->size = 0;
 
-    // Читаем общее колво записей
-    int recordCount;
-    inFile >> recordCount;
-    if (inFile.fail()) {
-        throw std::runtime_error("Ошибка: некорректный формат файла");
-        return;
-    }
-
-    inFile.ignore(); // Убираем символ /n после recordCount
-
-    // Читаем каждую запись
-    for (int i = 0; i < recordCount; i++) {
+    std::string line;
+    while (std::getline(inFile, line)) {
+        // Проверяем место и расширяем массив при необходимости
         if (this->size >= this->capacity) {
-            std::cout << "Вместимость хранилища недостаточна!! Расширяем..." << std::endl;
             int newCapacity = this->capacity * 2;
             ConferenceEntity** newData = new ConferenceEntity*[newCapacity];
-
-            for (int j = 0; j < this->size; j++) {
-                newData[j] = this->data[j];
-            }
-
+            for (int j = 0; j < this->size; ++j) { newData[j] = this->data[j]; }
             delete[] this->data;
             this->data = newData;
             this->capacity = newCapacity;
-            std::cout << "Вместимость увеличена до " << this->capacity << std::endl;
         }
 
-        int type;
-        inFile >> type;
-        if (inFile.fail()) continue; // Если не удалось прочитать тип, пропускаем
-        inFile.ignore();
+        if (line == "--- Speaker ---") {
+            std::string fullName, org, title, anno;
+            std::getline(inFile, fullName); // Читаем "FullName: ..."
+            std::getline(inFile, org);
+            std::getline(inFile, title);
+            std::getline(inFile, anno);
+            std::getline(inFile, line); // Читаем "--- End ---"
 
-        switch (type) {
-            case 1: { // Загружаем Speaker
-                std::string fullName, org, title, anno;
-                std::getline(inFile, fullName);
-                std::getline(inFile, org);
-                std::getline(inFile, title);
-                std::getline(inFile, anno);
-                this->data[this->size] = new Speaker(fullName, org, title, anno);
-                this->size++;
-                break;
-            }
-            case 2: { // Загружаем Administrator
-                std::string fullName, pos, resp;
-                std::getline(inFile, fullName);
-                std::getline(inFile, pos);
-                std::getline(inFile, resp);
-                this->data[this->size] = new Administrator(fullName, pos, resp);
-                this->size++;
-                break;
-            }
-            case 3: { // Загружаем ProgramEvent
-                std::string day, time, name;
-                std::getline(inFile, day);
-                std::getline(inFile, time);
-                std::getline(inFile, name);
-                this->data[this->size] = new ProgramEvent(day, time, name);
-                this->size++;
-                break;
-            }
-            default: // Если в файле какой-то неизвестный тип, пропускаем его
-                continue;
+            // Убираем ключи, оставляя только значения
+            fullName = fullName.substr(fullName.find(": ") + 2);
+            org = org.substr(org.find(": ") + 2);
+            title = title.substr(title.find(": ") + 2);
+            anno = anno.substr(anno.find(": ") + 2);
+
+            this->data[this->size++] = new Speaker(fullName, org, title, anno);
+
+        } else if (line == "--- Administrator ---") {
+            std::string fullName, pos, resp;
+            std::getline(inFile, fullName);
+            std::getline(inFile, pos);
+            std::getline(inFile, resp);
+            std::getline(inFile, line);
+
+            fullName = fullName.substr(fullName.find(": ") + 2);
+            pos = pos.substr(pos.find(": ") + 2);
+            resp = resp.substr(resp.find(": ") + 2);
+
+            this->data[this->size++] = new Administrator(fullName, pos, resp);
+
+        } else if (line == "--- ProgramEvent ---") {
+            std::string day, time, name;
+            std::getline(inFile, day);
+            std::getline(inFile, time);
+            std::getline(inFile, name);
+            std::getline(inFile, line);
+
+            day = day.substr(day.find(": ") + 2);
+            time = time.substr(time.find(": ") + 2);
+            name = name.substr(name.find(": ") + 2);
+
+            this->data[this->size++] = new ProgramEvent(day, time, name);
         }
     }
     // Закрываем файл

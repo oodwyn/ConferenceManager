@@ -17,6 +17,6 @@ public:
     void showAll(); // Метод отображения всех объектов
     void edit(); // Метод для редактирования объекта
 
-    void saveToFile(const std::string& filename);
-    void loadFromFile(const std::string& filename);
+    void saveToFile();
+    void loadFromFile();
 };
